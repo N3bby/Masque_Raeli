@@ -13,3 +13,4 @@ ignore:
  - Examples
  - .pkgmeta
  - README.md
+ - docs

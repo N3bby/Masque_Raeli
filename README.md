@@ -39,6 +39,11 @@ Ring Edge on the left, Ring Inset on the right.
 ![Ring Style](https://raw.githubusercontent.com/Caedilla/Masque_Raeli/master/Examples/Ring.png)
 
 
+## WoW Forever
+
+As of version 27.4 the skins also load in World of Warcraft: Forever (Interface 16001). See [docs/WOW_FOREVER.md](docs/WOW_FOREVER.md) for what was changed and how to install it for testing.
+
+
 ## Feedback & Support
 
 You can [report issues on Curseforge](https://wow.curseforge.com/projects/masque_raeli/issues) or contact me directly on [Discord](https://discord.gg/99QZ6sd).
