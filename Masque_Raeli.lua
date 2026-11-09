@@ -3,14 +3,19 @@ if not MSQ then return end
 
 --TODO: https://github.com/SFX-WoW/Masque/commit/f81e68b63629e7f7b6a05a1ae0b20d19f5b0316f#diff-afee5d33c5e1d495dec91aaeaebaf5d58fa602eb6bac650c47a830e525edca99 update to support masque 90002 cooldown pulse support.
 
--- Global methods moved into namespace as defined in this reddit post: https://www.reddit.com/r/wowaddons/comments/1erlj7g/getaddonmetadata_is_a_nil_value/
--- This expression allows us to support both the old & the new API
-local GetAddOnMetadata = GetAddOnMetadata or (C_AddOns and C_AddOns.GetAddOnMetadata)
+-- The global GetAddOnMetadata was moved into the C_AddOns namespace (Retail 11.0+, and every client built on
+-- the modern Mainline API, including WoW Forever). Prefer the namespaced version and fall back to the old global.
+-- See: https://www.reddit.com/r/wowaddons/comments/1erlj7g/getaddonmetadata_is_a_nil_value/
+local GetAddOnMetadata = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
+local VERSION = GetAddOnMetadata and GetAddOnMetadata('Masque_Raeli', 'Version')
+
+-- Masque skin API version these skins are written against (Masque 12.x).
+local API_VERSION = 120001
 
 MSQ:AddSkin('Raeli - Square Edge', {
 	Author = 'Raeli',
-	Version = GetAddOnMetadata('Masque_Raeli', 'Version'),
-	Masque_Version = 90001,
+	Version = VERSION,
+	API_VERSION = API_VERSION,
 	Shape = 'Square',
 	Description = "A simple sqaure pixel border skin.",
 	Websites = {
@@ -77,12 +82,27 @@ MSQ:AddSkin('Raeli - Square Edge', {
 		Color = {1, 1, 1, 0.6},
 		Texture = [[Interface\AddOns\Masque_Raeli\Textures\Raeli\Gloss]],
 	},
-	AutoCastable = {
-		Width = 65,
-		Height = 65,
-		OffsetX = 0.5,
-		OffsetY = -0.5,
-		Texture = [[Interface\Buttons\UI-AutoCastableOverlay]],
+	-- [ AutoCastOverlay ]
+	-- Masque 12.x replaced the old AutoCastable/AutoCastShine layers with AutoCast_*.
+	-- The original Raeli values live in the "Classic" sub-tables (clients without the animated shine).
+	-- The top-level values match Masque's defaults, so the modern pet autocast look (Retail/Forever) is unchanged.
+	AutoCast_Frame = {
+		Classic = { -- was: AutoCastShine
+			Width = 34,
+			Height = 34,
+			OffsetX = 1,
+			OffsetY = -1,
+		},
+	},
+	AutoCast_Corners = {
+		SetAllPoints = true,
+		Classic = { -- was: AutoCastable
+			Texture = [[Interface\Buttons\UI-AutoCastableOverlay]],
+			Width = 65,
+			Height = 65,
+			OffsetX = 0.5,
+			OffsetY = -0.5,
+		},
 	},
 	Highlight = {
 		Width = 36,
@@ -167,12 +187,6 @@ MSQ:AddSkin('Raeli - Square Edge', {
 		OffsetX = 0,
 		OffsetY = -2,
 	},
-	AutoCastShine = {
-		Width = 34,
-		Height = 34,
-		OffsetX = 1,
-		OffsetY = -1,
-	},
 	IconBorder = {
 		Texture = [[Interface\AddOns\Masque_Raeli\Textures\Raeli\Border]],
 		-- RelicTexture = [[Interface\AddOns\Masque_Apathy\Textures\Border]],
@@ -251,8 +265,8 @@ MSQ:AddSkin("Raeli - Square Inset", {
 
 MSQ:AddSkin('Raeli - Ring Edge', {
 	Author = 'Raeli',
-	Version = GetAddOnMetadata('Masque_Raeli', 'Version'),
-	Masque_Version = 90001,
+	Version = VERSION,
+	API_VERSION = API_VERSION,
 	Shape = 'Circle',
 	Description = "A simple circular pixel border skin.",
 	Websites = {
@@ -319,11 +333,23 @@ MSQ:AddSkin('Raeli - Ring Edge', {
 		Color = {1, 1, 1, 0.6},
 		Texture = [[Interface\AddOns\Masque_Raeli\Textures\RaeliRing\Gloss]],
 	},
-	AutoCastable = {
-		Width = 54,
-		Height = 54,
-		OffsetX = 0.5,
-		OffsetY = -0.5,
+	-- [ AutoCastOverlay ] (see the note in "Raeli - Square Edge")
+	AutoCast_Frame = {
+		Classic = { -- was: AutoCastShine
+			Width = 30,
+			Height = 30,
+			OffsetX = 1,
+			OffsetY = -1,
+		},
+	},
+	AutoCast_Corners = {
+		SetAllPoints = true,
+		Classic = { -- was: AutoCastable
+			Width = 54,
+			Height = 54,
+			OffsetX = 0.5,
+			OffsetY = -0.5,
+		},
 	},
 	Highlight = {
 		Width = 36,
@@ -408,12 +434,6 @@ MSQ:AddSkin('Raeli - Ring Edge', {
 		RelPoint = "BOTTOM",
 		OffsetX = 0,
 		OffsetY = -2,
-	},
-	AutoCastShine = {
-		Width = 30,
-		Height = 30,
-		OffsetX = 1,
-		OffsetY = -1,
 	},
 	IconBorder = {
 		Texture = [[Interface\AddOns\Masque_Raeli\Textures\RaeliRing\Border]],
